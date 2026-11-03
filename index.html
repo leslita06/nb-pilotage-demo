@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Neemba · Pilotage consolidé 11 pays · Maquette</title>
+<meta name="robots" content="noindex,nofollow,noarchive,nosnippet">
+<meta name="googlebot" content="noindex,nofollow">
+<meta name="description" content="Maquette de démonstration. Données fictives de démonstration.">
+<meta name="theme-color" content="#25455E">
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/leaflet.css">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="fictif">Données fictives de démonstration · aucun chiffre de cette page ne provient de Neemba</div>
+
+<header class="top">
+  <div class="top-in">
+    <img class="logo" src="assets/neemba_logo_multimarques.svg" alt="Neemba">
+    <div class="t">
+      <h1>Pilotage consolidé du groupe</h1>
+      <div class="sub">11 pays · ventes, location, pièces, service · <span id="arrete"></span></div>
+    </div>
+    <nav>
+      <button class="btn" id="b-export" title="Télécharger les chiffres de la vue filtrée">Exporter la vue</button>
+      <a class="btn plein" href="#note">Note du lundi</a>
+    </nav>
+  </div>
+</header>
+
+<div class="filtres">
+  <div class="f-in">
+    <div class="f"><label for="f-mois">Mois</label><select id="f-mois"></select></div>
+    <div class="seg" id="f-mode" role="group" aria-label="Période">
+      <button data-v="M" class="on">Mois</button><button data-v="C">Cumul annuel</button>
+    </div>
+    <div class="f"><label for="f-pays">Pays</label><select id="f-pays"></select></div>
+    <div class="f"><label for="f-act">Activité</label><select id="f-act"></select></div>
+    <button class="raz" id="raz" hidden>Tout effacer</button>
+  </div>
+</div>
+
+<main>
+  <p class="contexte" id="contexte"></p>
+
+  <section class="kpis" id="kpis"></section>
+
+  <section class="duo">
+    <div class="carte-bloc">
+      <div class="bloc-t">
+        <h2>Les 11 pays</h2>
+        <div class="seg petit" id="m-ind">
+          <button data-v="bud" class="on">Écart budget</button><button data-v="mg">Marge</button><button data-v="dso">Délai de paiement</button><button data-v="dispo">Flotte</button>
+        </div>
+      </div>
+      <div id="carte" aria-label="Carte des 11 pays"></div>
+      <div class="legende" id="legende"></div>
+      <p class="aide">Touchez un pays pour filtrer toute la page.</p>
+    </div>
+
+    <aside class="note" id="note">
+      <div class="note-tete">
+        <div class="note-eti">Ce que l'Expert envoie chaque lundi au comité de direction</div>
+        <div class="note-date" id="note-date"></div>
+      </div>
+      <h3>3 faits marquants</h3>
+      <ol class="faits" id="faits"></ol>
+      <h3 class="rouge">2 alertes</h3>
+      <ol class="alertes" id="alertes"></ol>
+      <div class="note-pied">
+        <span id="note-perim"></span>
+        <button class="btn-lien" id="b-copier">Copier la note</button>
+      </div>
+    </aside>
+  </section>
+
+  <section class="trio">
+    <div class="bloc">
+      <div class="bloc-t"><h2>Chiffre d'affaires et marge, 12 mois</h2></div>
+      <div class="graph"><canvas id="g-evol"></canvas></div>
+      <p class="lecture" id="l-evol"></p>
+    </div>
+    <div class="bloc">
+      <div class="bloc-t"><h2>Expliquer l'écart au budget</h2><span class="mini" id="ecart-dim"></span></div>
+      <div class="graph"><canvas id="g-ecart"></canvas></div>
+      <p class="lecture" id="l-ecart"></p>
+    </div>
+  </section>
+
+  <section class="bloc">
+    <div class="bloc-t"><h2>Toutes les alertes de la période</h2>
+      <details class="seuils"><summary>Régler les seuils</summary>
+        <div class="seuils-in">
+          <label>Délai de paiement au-delà de <input type="number" id="s-dso" value="75" min="30" max="150"> jours</label>
+          <label>Disponibilité flotte sous <input type="number" id="s-dispo" value="88" min="70" max="99"> %</label>
+          <label>Marge sous budget de plus de <input type="number" id="s-mg" value="2" min="0.5" max="10" step="0.5"> points</label>
+          <label>Chiffre d'affaires sous budget de plus de <input type="number" id="s-ca" value="10" min="2" max="40"> %</label>
+        </div>
+      </details>
+    </div>
+    <div class="liste-al" id="liste-al"></div>
+  </section>
+
+  <section class="bloc">
+    <div class="bloc-t"><h2>Par pays</h2><span class="mini">touchez une ligne pour filtrer</span></div>
+    <div class="tab-wrap"><table id="t-pays">
+      <thead><tr><th>Pays</th><th>Chiffre d'affaires</th><th>vs budget</th><th>Marge</th><th>Carnet</th><th>Flotte</th><th>Délai de paiement</th><th></th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+  </section>
+
+  <section class="bloc branche">
+    <h2>Une fois branché sur vos données</h2>
+    <div class="etapes">
+      <div><b>1. Les sources restent les vôtres</b><span>Votre ERP, le datamart du contrôle de gestion et VisionLink alimentent la page. Rien n'est ressaisi.</span></div>
+      <div><b>2. Les rapports existants restent en place</b><span>La page s'ajoute à vos rapports Power BI : elle lit les mêmes chiffres et y ajoute le commentaire, l'alerte et la note.</span></div>
+      <div><b>3. Chaque lundi à 7 h</b><span>L'Expert recalcule, vérifie les écarts, rédige la note du comité et la soumet à un responsable avant diffusion.</span></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div><b>Données fictives de démonstration.</b> Montants en francs CFA. Toute ressemblance avec des chiffres réels serait fortuite.</div>
+  <div class="yel">Proposé par Yelema · maquette non publiée</div>
+</footer>
+
+<div class="toast" id="toast"></div>
+<script src="assets/leaflet.js"></script>
+<script src="assets/chart.umd.min.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>
